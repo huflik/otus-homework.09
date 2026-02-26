@@ -1,0 +1,2 @@
+/usr/bin/ar qc libasync_core.a CMakeFiles/async_core.dir/consoleLogger.cpp.o CMakeFiles/async_core.dir/fileLogger.cpp.o CMakeFiles/async_core.dir/parser.cpp.o CMakeFiles/async_core.dir/processor.cpp.o CMakeFiles/async_core.dir/async.cpp.o
+/usr/bin/ranlib libasync_core.a

@@ -1,0 +1,38 @@
+[
+{
+  "directory": "/home/flik/soft/OTUS/otus-homework.09/build/src",
+  "command": "/usr/bin/g++  -I/home/flik/soft/OTUS/otus-homework.09/include -g -std=gnu++17 -Wall -Wextra -Wpedantic -Werror=uninitialized -o CMakeFiles/async_core.dir/consoleLogger.cpp.o -c /home/flik/soft/OTUS/otus-homework.09/src/consoleLogger.cpp",
+  "file": "/home/flik/soft/OTUS/otus-homework.09/src/consoleLogger.cpp",
+  "output": "src/CMakeFiles/async_core.dir/consoleLogger.cpp.o"
+},
+{
+  "directory": "/home/flik/soft/OTUS/otus-homework.09/build/src",
+  "command": "/usr/bin/g++  -I/home/flik/soft/OTUS/otus-homework.09/include -g -std=gnu++17 -Wall -Wextra -Wpedantic -Werror=uninitialized -o CMakeFiles/async_core.dir/fileLogger.cpp.o -c /home/flik/soft/OTUS/otus-homework.09/src/fileLogger.cpp",
+  "file": "/home/flik/soft/OTUS/otus-homework.09/src/fileLogger.cpp",
+  "output": "src/CMakeFiles/async_core.dir/fileLogger.cpp.o"
+},
+{
+  "directory": "/home/flik/soft/OTUS/otus-homework.09/build/src",
+  "command": "/usr/bin/g++  -I/home/flik/soft/OTUS/otus-homework.09/include -g -std=gnu++17 -Wall -Wextra -Wpedantic -Werror=uninitialized -o CMakeFiles/async_core.dir/parser.cpp.o -c /home/flik/soft/OTUS/otus-homework.09/src/parser.cpp",
+  "file": "/home/flik/soft/OTUS/otus-homework.09/src/parser.cpp",
+  "output": "src/CMakeFiles/async_core.dir/parser.cpp.o"
+},
+{
+  "directory": "/home/flik/soft/OTUS/otus-homework.09/build/src",
+  "command": "/usr/bin/g++  -I/home/flik/soft/OTUS/otus-homework.09/include -g -std=gnu++17 -Wall -Wextra -Wpedantic -Werror=uninitialized -o CMakeFiles/async_core.dir/processor.cpp.o -c /home/flik/soft/OTUS/otus-homework.09/src/processor.cpp",
+  "file": "/home/flik/soft/OTUS/otus-homework.09/src/processor.cpp",
+  "output": "src/CMakeFiles/async_core.dir/processor.cpp.o"
+},
+{
+  "directory": "/home/flik/soft/OTUS/otus-homework.09/build/src",
+  "command": "/usr/bin/g++  -I/home/flik/soft/OTUS/otus-homework.09/include -g -std=gnu++17 -Wall -Wextra -Wpedantic -Werror=uninitialized -o CMakeFiles/async_core.dir/async.cpp.o -c /home/flik/soft/OTUS/otus-homework.09/src/async.cpp",
+  "file": "/home/flik/soft/OTUS/otus-homework.09/src/async.cpp",
+  "output": "src/CMakeFiles/async_core.dir/async.cpp.o"
+},
+{
+  "directory": "/home/flik/soft/OTUS/otus-homework.09/build/src",
+  "command": "/usr/bin/g++  -I/home/flik/soft/OTUS/otus-homework.09/include -g -std=gnu++17 -Wall -Wextra -Wpedantic -Werror=uninitialized -o CMakeFiles/async.dir/main.cpp.o -c /home/flik/soft/OTUS/otus-homework.09/src/main.cpp",
+  "file": "/home/flik/soft/OTUS/otus-homework.09/src/main.cpp",
+  "output": "src/CMakeFiles/async.dir/main.cpp.o"
+}
+]

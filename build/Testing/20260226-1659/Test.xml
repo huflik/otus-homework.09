@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Site BuildName="(empty)"
+	BuildStamp="20260226-1659-Experimental"
+	Name="(empty)"
+	Generator="ctest-3.28.3"
+	CompilerName=""
+	CompilerVersion=""
+	OSName="Linux"
+	Hostname="flikkub"
+	OSRelease="6.17.0-14-generic"
+	OSVersion="#14~24.04.1-Ubuntu SMP PREEMPT_DYNAMIC Thu Jan 15 15:52:10 UTC 2"
+	OSPlatform="x86_64"
+	Is64Bits="1"
+	VendorString="GenuineIntel"
+	VendorID="Intel Corporation"
+	FamilyID="6"
+	ModelID="142"
+	ProcessorCacheSize="8192"
+	NumberOfLogicalCPU="8"
+	NumberOfPhysicalCPU="4"
+	TotalVirtualMemory="511"
+	TotalPhysicalMemory="7702"
+	LogicalProcessorsPerPhysical="2"
+	ProcessorClockFrequency="2900"
+	>
+	<Testing>
+		<StartDateTime>Feb 26 19:59 MSK</StartDateTime>
+		<StartTestTime>1772125141</StartTestTime>
+		<TestList/>
+		<EndDateTime>Feb 26 19:59 MSK</EndDateTime>
+		<EndTestTime>1772125141</EndTestTime>
+		<ElapsedMinutes>0</ElapsedMinutes>
+	</Testing>
+</Site>

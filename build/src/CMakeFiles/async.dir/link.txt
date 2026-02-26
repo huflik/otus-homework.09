@@ -1,0 +1,1 @@
+/usr/bin/g++ -g CMakeFiles/async.dir/main.cpp.o -o ../async  libasync_core.a 
