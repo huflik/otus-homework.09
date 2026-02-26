@@ -19,6 +19,7 @@ public:
 private:
     void process();
     
+    std::mutex mutex_;
     BulkQueueWeak_t m_queue;
     Bulk m_bulk;
     std::thread m_thread;

@@ -81,7 +81,9 @@ void disconnect(handle_t handle) {
     auto it = contexts.begin();
     while (it != contexts.end()) {
         if ((*it).get() == handle) {
-            (*it)->parser->Eof();
+            {
+                (*it)->parser->Eof();
+            }
             contexts.erase(it);
             break;
         }

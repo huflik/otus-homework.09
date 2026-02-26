@@ -9,6 +9,7 @@ ConsoleLogger::~ConsoleLogger() {
 }
 
 void ConsoleLogger::start() {
+    std::lock_guard<std::mutex> lock(mutex_);
     if (!m_running) {
         m_running = true;
         m_thread = std::thread(&ConsoleLogger::process, this);
@@ -16,11 +17,16 @@ void ConsoleLogger::start() {
 }
 
 void ConsoleLogger::stop() {
-    if (m_running) {
+    std::thread threadToJoin;
+    {
+        std::lock_guard<std::mutex> lock(mutex_);
+        if (!m_running) return;
         m_running = false;
-        if (m_thread.joinable()) {
-            m_thread.join();
-        }
+        threadToJoin = std::move(m_thread);
+    }
+    
+    if (threadToJoin.joinable()) {
+        threadToJoin.join();
     }
 }
 

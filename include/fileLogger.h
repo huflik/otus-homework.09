@@ -1,9 +1,10 @@
 #pragma once
 
-#include "iLogger.h"
 #include <thread>
 #include <atomic>
+#include <mutex>
 #include "concurrentQueue.h"
+#include "iLogger.h"
 
 using BulkQueue_t = ConcurrentQueue<Bulk>;   
 using BulkQueueShared_t = std::shared_ptr<BulkQueue_t>;
@@ -21,6 +22,7 @@ private:
     void process();
     std::string generateFilename(const Bulk& bulk);
     
+    std::mutex mutex_;
     BulkQueueWeak_t m_queue;
     Bulk m_bulk;
     std::thread m_thread;

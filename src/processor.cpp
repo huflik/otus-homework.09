@@ -1,15 +1,11 @@
-#include "processor.h"
 #include <ctime>
+#include "processor.h"
 
 Processor::Processor(const BulkQueueShared_t& consoleQueue, const BulkQueueShared_t& fileQueue) 
     : m_consoleQueue(consoleQueue), m_fileQueue(fileQueue) {}
 
-//void Processor::Subscribe(std::shared_ptr<ILogger> logger) {
-    // Оставляем для совместимости, но не используем
-//   loggers_.push_back(logger);
-//}
-
 void Processor::Add(const std::string& cmd) {
+    std::lock_guard<std::mutex> lock(mutex_);
     if (current_.commands.empty()) {
         current_.timestamp = std::time(nullptr);
     }
@@ -17,11 +13,11 @@ void Processor::Add(const std::string& cmd) {
 }
 
 void Processor::Finish() {
+    std::lock_guard<std::mutex> lock(mutex_);
     if (current_.commands.empty()) {
         return;
     }
 
-    // Отправляем в обе очереди
     if (m_consoleQueue) {
         m_consoleQueue->push(current_);
     }

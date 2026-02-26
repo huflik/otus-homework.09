@@ -11,6 +11,7 @@ FileLogger::~FileLogger() {
 }
 
 void FileLogger::start() {
+    std::lock_guard<std::mutex> lock(mutex_);
     if (!m_running) {
         m_running = true;
         m_thread = std::thread(&FileLogger::process, this);
@@ -18,11 +19,16 @@ void FileLogger::start() {
 }
 
 void FileLogger::stop() {
-    if (m_running) {
+    std::thread threadToJoin;
+    {
+        std::lock_guard<std::mutex> lock(mutex_);
+        if (!m_running) return;
         m_running = false;
-        if (m_thread.joinable()) {
-            m_thread.join();
-        }
+        threadToJoin = std::move(m_thread);  // Забираем поток
+    }
+    
+    if (threadToJoin.joinable()) {
+        threadToJoin.join();  // join() БЕЗ мьютекса!
     }
 }
 

@@ -1,8 +1,9 @@
 #pragma once
 
-#include "processor.h"
 #include <string>
 #include <memory>
+#include <mutex>
+#include "processor.h"
 
 class Parser {
 public:
@@ -11,6 +12,7 @@ public:
     void Eof();
 
 private:
+    std::mutex mutex_;
     size_t n_;
     size_t count_{0};
     int depth_{0};

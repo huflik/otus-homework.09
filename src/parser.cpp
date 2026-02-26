@@ -4,6 +4,8 @@ Parser::Parser(size_t n, std::shared_ptr<Processor> p) : n_(n), processor_(std::
 
 void Parser::Process(const std::string& line) {
 
+    std::lock_guard<std::mutex> lock(mutex_);
+
     if (line == "{") {
         if (depth_ == 0) {
             processor_->Finish();
@@ -35,6 +37,8 @@ void Parser::Process(const std::string& line) {
 }
 
 void Parser::Eof() {
+
+    std::lock_guard<std::mutex> lock(mutex_);
 
     if (depth_ == 0) {
         processor_->Finish();
