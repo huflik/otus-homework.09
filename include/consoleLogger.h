@@ -20,8 +20,8 @@ private:
     void process();
     
     std::mutex mutex_;
-    BulkQueueWeak_t m_queue;
-    Bulk m_bulk;
-    std::thread m_thread;
-    bool m_running{false};
+    BulkQueueWeak_t queue_;
+    Bulk bulk_;
+    std::thread thread_;
+    bool running_{false};
 };

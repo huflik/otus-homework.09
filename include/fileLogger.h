@@ -23,9 +23,9 @@ private:
     std::string generateFilename(const Bulk& bulk);
     
     std::mutex mutex_;
-    BulkQueueWeak_t m_queue;
-    Bulk m_bulk;
-    std::thread m_thread;
-    std::atomic<size_t> m_counter{0};
-    bool m_running{false};
+    BulkQueueWeak_t queue_;
+    Bulk bulk_;
+    std::thread thread_;
+    std::atomic<size_t> counter_{0};
+    bool running_{false};
 };

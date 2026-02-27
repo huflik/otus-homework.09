@@ -1,15 +1,26 @@
 #include <iostream>
 #include <thread>
+#include <chrono>
+#include <string>
+#include <vector>
 #include "async.h"
 
-void demonstrateAsyncLibrary() {
-    
+
+void SendCommand(async::handle_t handle, const std::string& cmd, bool addNewline = true) {
+    std::string data = cmd;
+    if (addNewline) {
+        data += '\n';
+    }
+    async::receive(handle, data.c_str(), data.size());
+}
+
+void AsyncLibrary() {
+
     std::size_t bulk1 = 3;  
     std::size_t bulk2 = 5;  
     std::size_t bulk3 = 2;  
     std::size_t bulk4 = 1;  
     std::size_t bulk5 = 10; 
-
     
     auto h1 = async::connect(bulk1);
     auto h2 = async::connect(bulk2);
@@ -17,59 +28,115 @@ void demonstrateAsyncLibrary() {
     auto h4 = async::connect(bulk4);
     auto h5 = async::connect(bulk5);
     
+    SendCommand(h1, "cmd1", false);  
+    SendCommand(h2, "cmdA", false);  
+    SendCommand(h3, "single", false); 
+    
+    SendCommand(h1, "", true);  
+    SendCommand(h2, "", true);  
+    SendCommand(h3, "", true);  
 
-    async::receive(h1, "cmd1", 4);      
-    async::receive(h2, "cmdA", 4);      
-    async::receive(h3, "single", 6);   
-    
-    async::receive(h1, "\ncmd2\ncmd3\n", 11);     
-    async::receive(h4, "x\ny\nz\n", 6);          
-    
-    async::receive(h2, "start\n{\ninner1\ninner2\n{\ndeep1\ndeep2\n}\ninner3\n}\nend\n", 50);
-    
-    async::receive(h3, "A\nB\nC\n", 6);            
-    async::receive(h5, "long1\nlong2\n", 12);      
-    async::receive(h3, "D\nE\n", 4);               
-    async::receive(h1, "extra1\nextra2\n", 14);   
-    
+    SendCommand(h1, "cmd2");
+    SendCommand(h1, "cmd3");
+    SendCommand(h4, "x");
+    SendCommand(h4, "y");
+    SendCommand(h4, "z");
 
-    async::receive(h4, "1\n2\n3\n4\n5\n6\n7\n8\n9\n10\n", 30);
+    SendCommand(h2, "start");
+    SendCommand(h2, "{");
+    SendCommand(h2, "inner1");
+    SendCommand(h2, "inner2");
+    SendCommand(h2, "{");
+    SendCommand(h2, "deep1");
+    SendCommand(h2, "deep2");
+    SendCommand(h2, "}");  
+    SendCommand(h2, "inner3");
+    SendCommand(h2, "}");  
+    SendCommand(h2, "end");
 
-    async::receive(h2, "\n\n\ncmdX\n\ncmdY\n\n", 18);
-    async::receive(h5, "!@#$%\n^&*()\n", 14);
-    
+    SendCommand(h3, "A");
+    SendCommand(h3, "B");
+    SendCommand(h3, "C");
+    SendCommand(h5, "long1");
+    SendCommand(h5, "long2");
+    SendCommand(h3, "D");
+    SendCommand(h3, "E");
+    SendCommand(h1, "extra1");
+    SendCommand(h1, "extra2");
+
+    for (int i = 1; i <= 10; ++i) {
+        SendCommand(h4, std::to_string(i));
+    }
+
+    SendCommand(h2, "", true);  
+    SendCommand(h2, "", true);  
+    SendCommand(h2, "", true);  
+    SendCommand(h2, "cmdX");
+    SendCommand(h2, "", true);  
+    SendCommand(h2, "", true);  
+    SendCommand(h2, "cmdY");
+    SendCommand(h2, "", true);  
+    SendCommand(h2, "", true);  
+
+    SendCommand(h5, "!@#$%");
+    SendCommand(h5, "^&*()");
+
     std::string longCmd = "very_long_command_with_many_characters_";
     longCmd += std::string(50, 'x');
-    longCmd += "\n";
-    async::receive(h3, longCmd.c_str(), longCmd.size());
-    
-    async::receive(h4, "outside\n{\ninside1\ninside2\n", 27);
-    
-    async::receive(h1, "{\nblock1_cmd1\nblock1_cmd2\n}\n{\nblock2_cmd1\n}\n", 45);
-    
+    SendCommand(h3, longCmd);
+
+    SendCommand(h4, "outside");
+    SendCommand(h4, "{");  
+    SendCommand(h4, "inside1", false);  
+    SendCommand(h4, "inside2", false);  
+
+    SendCommand(h1, "{");  
+    SendCommand(h1, "block1_cmd1");
+    SendCommand(h1, "block1_cmd2");
+    SendCommand(h1, "}");  
+    SendCommand(h1, "{");  
+    SendCommand(h1, "block2_cmd1");
+    SendCommand(h1, "}");  
+
     for (int i = 0; i < 5; ++i) {
-        async::receive(h5, "m", 1);
-        async::receive(h5, "i", 1);
-        async::receive(h5, "c", 1);
-        async::receive(h5, "r", 1);
-        async::receive(h5, "o", 1);
-        async::receive(h5, "\n", 1);
+        SendCommand(h5, "micro");
     }
+
+    SendCommand(h2, "normal1");
+    SendCommand(h2, "normal2");
+    SendCommand(h2, "}"); 
+    SendCommand(h2, "normal3");
+
+    SendCommand(h5, "pre1");
+    SendCommand(h5, "pre2");
+    SendCommand(h5, "pre3");
+    SendCommand(h5, "pre4");
+    SendCommand(h5, "{");  
+    SendCommand(h5, "dyn1");
+    SendCommand(h5, "dyn2");
+    SendCommand(h5, "}");  
+    SendCommand(h5, "post1");
+    SendCommand(h5, "post2");
     
-    async::receive(h2, "normal1\nnormal2\n}\nnormal3\n", 27);
+    std::this_thread::sleep_for(std::chrono::milliseconds(100));
     
-    async::receive(h5, "pre1\npre2\npre3\npre4\n{\ndyn1\ndyn2\n}\npost1\npost2\n", 52);
-    
-    async::disconnect(h3);   
+    async::disconnect(h3);
     async::disconnect(h1);
     async::disconnect(h5);
     async::disconnect(h2);
-    async::disconnect(h4); 
+    async::disconnect(h4);
     
     async::stop();
+
 }
 
-int main(int, char *[]) {
-    demonstrateAsyncLibrary();  
+int main() {
+    try {
+        AsyncLibrary();
+    } catch (const std::exception& e) {
+        std::cerr << "Error: " << e.what() << std::endl;
+        return 1;
+    }
+    
     return 0;
 }

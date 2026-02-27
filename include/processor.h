@@ -19,6 +19,6 @@ public:
 private:
     std::mutex mutex_;
     Bulk current_;
-    BulkQueueShared_t m_consoleQueue;
-    BulkQueueShared_t m_fileQueue;
+    BulkQueueShared_t consoleQueue_;
+    BulkQueueShared_t fileQueue_;
 };

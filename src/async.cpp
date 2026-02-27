@@ -2,6 +2,7 @@
 #include <list>
 #include <memory>
 #include <thread>
+#include <unordered_map>
 
 #include "async.h"
 #include "parser.h"
@@ -11,16 +12,15 @@
 
 namespace async {
 
-// Общие очереди для всех контекстов
 static BulkQueueShared_t consoleQueue = std::make_shared<BulkQueue_t>();
 static BulkQueueShared_t fileQueue = std::make_shared<BulkQueue_t>();
 
-// Логгеры в отдельных потоках
 static ConsoleLogger consoleLogger(consoleQueue);
 static FileLogger fileLogger1(fileQueue);
 static FileLogger fileLogger2(fileQueue);
+static std::unordered_map<handle_t, std::string> contextBuffers;
+static std::mutex buffersMutex;
 
-// Контексты подключений
 struct Context {
     std::unique_ptr<Parser> parser;
     std::shared_ptr<Processor> processor;
@@ -30,7 +30,6 @@ static std::list<std::unique_ptr<Context>> contexts;
 static std::mutex contextsMutex;
 
 handle_t connect(std::size_t bulkSize) {
-    // Запускаем логгеры при первом подключении
     static std::once_flag flag;
     std::call_once(flag, [](){
         consoleLogger.start();
@@ -42,7 +41,6 @@ handle_t connect(std::size_t bulkSize) {
     
     auto context = std::make_unique<Context>();
     
-    // Теперь процессор получает обе очереди
     context->processor = std::make_shared<Processor>(consoleQueue, fileQueue);
     context->parser = std::make_unique<Parser>(bulkSize, context->processor);
     
@@ -55,35 +53,52 @@ void receive(handle_t handle, const char *data, std::size_t size) {
     
     for (auto& ctx : contexts) {
         if (ctx.get() == handle) {
-            // Разбираем входные данные по символам
-            std::string current;
-            for (size_t i = 0; i < size; ++i) {
-                if (data[i] == '\n' || data[i] == '\0') {
-                    if (!current.empty()) {
-                        ctx->parser->Process(current);
-                        current.clear();
-                    }
-                } else {
-                    current.push_back(data[i]);
+
+            std::string& buffer = contextBuffers[handle];
+            buffer.append(data, size);
+            
+            size_t pos = 0;
+            while (true) {
+                size_t newline = buffer.find('\n', pos);
+                if (newline == std::string::npos) break;
+                
+                std::string cmd = buffer.substr(pos, newline - pos);
+                if (!cmd.empty()) {
+                    ctx->parser->Process(cmd);
                 }
+                pos = newline + 1; 
             }
-            if (!current.empty()) {
-                ctx->parser->Process(current);
+            
+            if (pos < buffer.size()) {
+                buffer = buffer.substr(pos);
+            } else {
+                buffer.clear();
             }
             break;
         }
     }
 }
 
+
 void disconnect(handle_t handle) {
     std::lock_guard<std::mutex> lock(contextsMutex);
+    
+    auto bufIt = contextBuffers.find(handle);
+    if (bufIt != contextBuffers.end() && !bufIt->second.empty()) {
+ 
+        for (auto& ctx : contexts) {
+            if (ctx.get() == handle) {
+                ctx->parser->Process(bufIt->second);
+                break;
+            }
+        }
+        contextBuffers.erase(bufIt);
+    }
     
     auto it = contexts.begin();
     while (it != contexts.end()) {
         if ((*it).get() == handle) {
-            {
-                (*it)->parser->Eof();
-            }
+            (*it)->parser->Eof();
             contexts.erase(it);
             break;
         }
