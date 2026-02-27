@@ -65,7 +65,7 @@ jobs:
       - name: Rename package
         run: |
           cd build
-          mv async_cli-0.0.${{ github.run_number }}-Linux.deb async.deb
+          mv async-0.0.${{ github.run_number }}-Linux.deb async.deb
 
       - name: Upload Release Asset
         if: steps.create_release.outputs.id != ''
