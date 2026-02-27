@@ -8,7 +8,6 @@
 #include "processor.h"
 #include "consoleLogger.h"
 #include "fileLogger.h"
-
 namespace async {
 
 static BulkQueueShared_t consoleQueue = std::make_shared<BulkQueue_t>();
@@ -29,6 +28,7 @@ static std::list<std::unique_ptr<Context>> contexts;
 static std::mutex contextsMutex;
 
 handle_t connect(std::size_t bulkSize) {
+
     static std::once_flag flag;
     std::call_once(flag, [](){
         consoleLogger.start();
@@ -44,10 +44,12 @@ handle_t connect(std::size_t bulkSize) {
     context->parser = std::make_unique<Parser>(bulkSize, context->processor);
     
     contexts.push_back(std::move(context));
+
     return contexts.back().get();
 }
 
 void receive(handle_t handle, const char *data, std::size_t size) {
+
     std::lock_guard<std::mutex> lock(contextsMutex);
     
     for (auto& ctx : contexts) {
@@ -62,6 +64,7 @@ void receive(handle_t handle, const char *data, std::size_t size) {
                 if (newline == std::string::npos) break;
                 
                 std::string cmd = buffer.substr(pos, newline - pos);
+
                 if (!cmd.empty()) {
                     ctx->parser->Process(cmd);
                 }

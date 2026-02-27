@@ -3,7 +3,7 @@
 Parser::Parser(size_t n, std::shared_ptr<Processor> p) : n_(n), processor_(std::move(p)) {}
 
 void Parser::Process(const std::string& line) {
-
+    
     std::lock_guard<std::mutex> lock(mutex_);
 
     if (line == "{") {

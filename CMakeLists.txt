@@ -7,15 +7,15 @@ project(async VERSION ${PROJECT_VERSION})
 
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -pthread -g")
 
-add_compile_options(-Wall -Wextra -Wpedantic -Werror=uninitialized)
+add_compile_options(-Wall -Wextra -Wpedantic)
 
 enable_testing()
 
 find_package(GTest REQUIRED CONFIG)
 
 add_subdirectory(src)
-#add_subdirectory(tests)
 
 set(CPACK_GENERATOR "DEB")
 set(CPACK_PACKAGE_VENDOR "oflika256")

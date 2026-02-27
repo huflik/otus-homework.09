@@ -1,6 +1,7 @@
 #include <ctime>
 #include "processor.h"
 
+
 Processor::Processor(const BulkQueueShared_t& consoleQueue, const BulkQueueShared_t& fileQueue) 
     : consoleQueue_(consoleQueue), fileQueue_(fileQueue) {}
 
