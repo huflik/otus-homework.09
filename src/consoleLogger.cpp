@@ -18,6 +18,7 @@ void ConsoleLogger::start() {
 
 void ConsoleLogger::stop() {
     std::thread threadToJoin;
+    
     {
         std::lock_guard<std::mutex> lock(mutex_);
         if (!running_) return;

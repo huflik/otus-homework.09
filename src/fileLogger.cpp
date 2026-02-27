@@ -20,6 +20,7 @@ void FileLogger::start() {
 
 void FileLogger::stop() {
     std::thread threadToJoin;
+    
     {
         std::lock_guard<std::mutex> lock(mutex_);
         if (!running_) return;

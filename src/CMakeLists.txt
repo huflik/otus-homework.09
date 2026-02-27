@@ -1,4 +1,4 @@
-add_library(async_core
+add_library(async_lib SHARED
     consoleLogger.cpp
     fileLogger.cpp
     parser.cpp
@@ -6,16 +6,47 @@ add_library(async_core
     async.cpp
 )
 
-target_include_directories(async_core
-    PUBLIC ${PROJECT_SOURCE_DIR}/include
+set_target_properties(async_lib PROPERTIES 
+    OUTPUT_NAME "async"
+    LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}
 )
 
-add_executable(async main.cpp)
-
-target_link_libraries(async PRIVATE
-    async_core
+target_include_directories(async_lib
+    PUBLIC 
+        ${PROJECT_SOURCE_DIR}/include 
 )
 
-set_target_properties(async PROPERTIES OUTPUT_NAME ${PROJECT_NAME})
+add_executable(async_cli main.cpp)
 
-set_target_properties(async PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR})
+target_link_libraries(async_cli PRIVATE
+    async_lib
+)
+
+target_include_directories(async_cli
+    PRIVATE 
+        ${PROJECT_SOURCE_DIR}/include  
+)
+
+set_target_properties(async_cli PROPERTIES
+    RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}
+)
+
+install(TARGETS async_lib
+    LIBRARY DESTINATION lib
+)
+
+install(DIRECTORY ${PROJECT_SOURCE_DIR}/include/
+    DESTINATION include
+    FILES_MATCHING PATTERN "*.h"
+)
+
+install(TARGETS async_cli
+    RUNTIME DESTINATION bin
+)
+
+add_custom_command(TARGET async_lib POST_BUILD
+    COMMAND ${CMAKE_COMMAND} -E copy
+        ${CMAKE_BINARY_DIR}/libasync.so
+        ${CMAKE_BINARY_DIR}/
+    DEPENDS async_lib
+)

@@ -1,8 +1,8 @@
 #pragma once
 
-#include "iLogger.h"
 #include <thread>
 #include "concurrentQueue.h"
+#include "iLogger.h"
 
 using BulkQueue_t = ConcurrentQueue<Bulk>;   
 using BulkQueueShared_t = std::shared_ptr<BulkQueue_t>;

@@ -3,7 +3,6 @@
 #include <memory>
 #include <thread>
 #include <unordered_map>
-
 #include "async.h"
 #include "parser.h"
 #include "processor.h"
