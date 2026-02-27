@@ -37,9 +37,8 @@ install(TARGETS async_lib
     LIBRARY DESTINATION lib
 )
 
-install(DIRECTORY ${HEADER_DIR}/
+install(FILES ${HEADER_DIR}/async.h
     DESTINATION include
-    FILES_MATCHING PATTERN "*.h"
 )
 
 install(TARGETS async_cli
